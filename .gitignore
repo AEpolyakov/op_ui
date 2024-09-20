@@ -1,0 +1,7 @@
+/dist
+/build
+*.exe
+*.spec
+requirements.txt
+qt.ui
+.idea
