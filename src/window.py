@@ -1,10 +1,8 @@
-from enum import Enum
-
 from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6.uic import loadUi
 
-from src.uart import Uart
+from uart import Uart
 
 BIT_0 = 0x0001
 BIT_1 = 0x0002
@@ -27,14 +25,13 @@ BIT_14 = 0x4000
 BIT_15 = 0x8000
 
 
-
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
         self.timer = QTimer()
         self.uart = Uart()
-        self.timer.timeout.connect(self.perform_action)
+        self.timer.timeout.connect(self.exchange)
         self.timer.start(100)
 
         self.setWindowTitle("My App")
@@ -45,7 +42,7 @@ class MainWindow(QMainWindow):
         # self.background_task = BackgroundTask(buffer)
         # self.background_task.start()
 
-    def perform_action(self):
+    def exchange(self):
         try:
             self.uart.write_data('012345678901')
             raw_buffer = self.uart.read_data()
@@ -54,6 +51,16 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             print(f'error {e}')
+
+    def get_values_from_prog(self) -> str:
+        leds = [
+            int(self.led0.text(), 16),
+            int(self.led1.text(), 16),
+            int(self.led2.text(), 16),
+            int(self.led3.text(), 16),
+            int(self.led4.text(), 16)
+        ]
+
 
     @staticmethod
     def refine_buffer(raw_buffer: bytes) -> dict[int, str]:
@@ -151,12 +158,12 @@ class MainWindow(QMainWindow):
         self.korr_tochn_tov.setText(buffer[8] and BIT_1)
 
         # addr=0x41 - 0x45
-        self.acps0.setText(buffer[9] and 0x03ff)
-        self.acps1.setText(buffer[10] and 0x03ff)
-        self.acps2.setText(buffer[11] and 0x03ff)
-        self.acps3.setText(buffer[12] and 0x03ff)
-        self.acps4.setText(buffer[13] and 0x03ff)
-        self.acps5.setText(buffer[14] and 0x03ff)
+        self.acps60.setText(buffer[9] and 0x03ff)
+        self.acps61.setText(buffer[10] and 0x03ff)
+        self.acps610.setText(buffer[11] and 0x03ff)
+        self.acps62.setText(buffer[12] and 0x03ff)
+        self.acps620.setText(buffer[13] and 0x03ff)
+        self.acps621.setText(buffer[14] and 0x03ff)
 
         # addr=0x0c01 - 0x0c13
         self.op0.setText(buffer[15])
