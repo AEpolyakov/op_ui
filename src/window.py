@@ -1,28 +1,12 @@
+import logging
+import time
+
 from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6.uic import loadUi
 
-from uart import Uart
-
-BIT_0 = 0x0001
-BIT_1 = 0x0002
-BIT_2 = 0x0004
-BIT_3 = 0x0008
-
-BIT_4 = 0x0010
-BIT_5 = 0x0020
-BIT_6 = 0x0040
-BIT_7 = 0x0080
-
-BIT_8 = 0x0100
-BIT_9 = 0x0200
-BIT_10 = 0x0400
-BIT_11 = 0x0800
-
-BIT_12 = 0x1000
-BIT_13 = 0x2000
-BIT_14 = 0x4000
-BIT_15 = 0x8000
+from src.constants import (BIT_0, BIT_1, BIT_2, BIT_3, BIT_4, BIT_5, BIT_6, BIT_7, BIT_8, BIT_9, BIT_10, BIT_11, BIT_12, BIT_13, BIT_14, BIT_15)
+from uart import Uart, UartReadError
 
 
 class MainWindow(QMainWindow):
@@ -31,6 +15,7 @@ class MainWindow(QMainWindow):
 
         self.timer = QTimer()
         self.uart = Uart()
+
         self.timer.timeout.connect(self.exchange)
         self.timer.start(100)
 
@@ -39,148 +24,169 @@ class MainWindow(QMainWindow):
 
         loadUi("./qt.ui", self)
 
-        # self.background_task = BackgroundTask(buffer)
-        # self.background_task.start()
+        self.com_status.setText(f'{self.uart.port} Подключен')
 
     def exchange(self):
         try:
-            self.uart.write_data('012345678901')
+            data_to_send = self.get_values_from_prog()
+            self.uart.write_data(data_to_send)
+
+            t1 = time.perf_counter()
             raw_buffer = self.uart.read_data()
+            t2 = time.perf_counter()
+            print(f'performance {t2 - t1}')
+
+            self.com_status.setText(f'{self.uart.port} Подключен')
+
             buffer = self.refine_buffer(raw_buffer)
             self.set_values_from_buffer(buffer)
 
+        except UartReadError as e:
+            self.com_status.setText(f'{self.uart.port} Ошибка')
+            logging.error('Ошибка чтения UART')
         except Exception as e:
-            print(f'error {e}')
+            logging.error(f'Ошибка {e}')
 
     def get_values_from_prog(self) -> str:
-        leds = [
-            int(self.led0.text(), 16),
-            int(self.led1.text(), 16),
-            int(self.led2.text(), 16),
-            int(self.led3.text(), 16),
-            int(self.led4.text(), 16)
-        ]
+        # leds = [
+        #     int(self.led0.text(), 16),
+        #     int(self.led1.text(), 16),
+        #     int(self.led2.text(), 16),
+        #     int(self.led3.text(), 16),
+        #     int(self.led4.text(), 16)
+        # ]
+        return '012345678901'
 
-
-    @staticmethod
-    def refine_buffer(raw_buffer: bytes) -> dict[int, str]:
-        buffer = [bin(word).removeprefix('0b') for word in raw_buffer]
+    def refine_buffer(self, raw_buffer: dict[int, str]) -> dict[int, int]:
         refined_buffer = dict()
-        index = 0
-        for word in buffer:
-            refined_buffer[index] = word[index * 2] + word[index * 2 + 1]
-            index += 1
+
+        for index in range(self.uart.buffer_len // 2):
+            refined_buffer[index] = int(raw_buffer[index * 2 + 1] + raw_buffer[index * 2], 16)
+
+        logging.info(f'refined')
         return refined_buffer
 
-    def set_values_from_buffer(self, buffer: dict[int, str]) -> None:
+    def set_values_from_buffer(self, buffer: dict[int, int]) -> None:
+        logging.info('set values start')
 
         # addr=0x0021 0 5
-        self.kanaly.setText(buffer[0] and 0x0fff)
-        self.pr9A317M.setText(buffer[0] and BIT_15)
+        temp = buffer[2]
+        self.kanaly.setText(bin(temp & 0x0fff)[2:])
+        # self.pr9A317M.setText(bin(temp & BIT_15)[2:])
 
         # addr=0x0022 1 5
-        self.sbrosy.setText(buffer[1] and 0x0fff)
-        self.nal_R51.setText(buffer[1] and BIT_14)
-        self.ots_R36.setText(buffer[1] and BIT_13)
-        self.serv_po.setText(buffer[1] and BIT_12)
+        temp = buffer[3]
+        self.sbrosy.setText(bin(temp & 0x0fff)[2:])
+        # self.nal_R51.setText(bin(temp & BIT_14 )[2:])
+        # self.ots_R36.setText(bin(temp & BIT_13 )[2:])
+        # self.serv_po.setText(bin(temp & BIT_12 )[2:])
 
         # addr=0x0023 0 1 5
-        self.sbros_strok.setText(buffer[2] and BIT_13)
-        self.stroki.setText(buffer[2] and 0x1f00)
-        self.otkaz_ot_CU.setText(buffer[2] and BIT_7)
-        self.peresbros.setText(buffer[2] and BIT_6)
-        self.inerc_sopr.setText(buffer[2] and BIT_5)
-        self.pom_prin_c.setText(buffer[2] and BIT_4)
-        self.zapros.setText(buffer[2] and BIT_3)
-        self.sbr_zahv.setText(buffer[2] and BIT_2)
-        self.razr_zahv.setText(buffer[2] and BIT_1)
+        temp = buffer[4]
+        self.sbros_strok.setText(bin(temp & BIT_13)[2:])
+        self.stroki.setText(bin(temp & 0x1f00)[2:])
+        # self.otkaz_ot_CU.setText(bin(temp & BIT_7 )[2:])
+        # self.peresbros.setText(bin(temp & BIT_6 )[2:])
+        # self.inerc_sopr.setText(bin(temp & BIT_5 )[2:])
+        # self.pom_prin_c.setText(bin(temp & BIT_4 )[2:])
+        self.zapros.setText(bin(temp & BIT_3)[2:])
+        self.sbr_zahv.setText(bin(temp & BIT_2)[2:])
+        self.razr_zahv.setText(bin(temp & BIT_1)[2:])
 
         # addr=0x0024 2 5
-        self.ubyv_lchm.setText(buffer[3] and BIT_11)
-        self.p_avt_D.setText(buffer[3] and BIT_10)
-        self.ruchn_Fd.setText(buffer[3] and BIT_9)
-        self.avt_smena_izl.setText(buffer[3] and BIT_8)
-        self.zahv_ruchn.setText(buffer[3] and BIT_7)
-        self.dist_120.setText(buffer[3] and BIT_6)
-        self.lchm_komb.setText(buffer[3] and BIT_5)
-        self.dist_40.setText(buffer[3] and BIT_4)
-        self.obrab_sdc.setText(buffer[3] and BIT_3)
-        self.izl_lchm.setText(buffer[3] and BIT_2)
-        self.izl_kni.setText(buffer[3] and BIT_1)
-        self.avt_rab.setText(buffer[3] and BIT_0)
+        temp = buffer[5]
+        # self.ubyv_lchm.setText(bin(temp & BIT_11)[2:])
+        # self.p_avt_D.setText(bin(temp & BIT_10)[2:])
+        # self.ruchn_Fd.setText(bin(temp & BIT_9)[2:])
+        # self.avt_smena_izl.setText(bin(temp & BIT_8)[2:])
+        # self.zahv_ruchn.setText(bin(temp & BIT_7)[2:])
+        # self.dist_120.setText(bin(temp & BIT_6)[2:])
+        # self.lchm_komb.setText(bin(temp & BIT_5)[2:])
+        # self.dist_40.setText(bin(temp & BIT_4)[2:])
+        # self.obrab_sdc.setText(bin(temp & BIT_3)[2:])
+        # self.izl_lchm.setText(bin(temp & BIT_2)[2:])
+        # self.izl_kni.setText(bin(temp & BIT_1)[2:])
+        # self.avt_rab.setText(bin(temp & BIT_0)[2:])
 
         # addr=0x0025 0 2 5
-        self.att20.setText(buffer[4] and BIT_11)
-        self.karta_mestn.setText(buffer[4] and BIT_10)
-        self.avt_pomeh.setText(buffer[4] and BIT_9)
-        self.obzor_nereg.setText(buffer[4] and BIT_7)
-        self.razr_peresr.setText(buffer[4] and BIT_6)
-        self.att60.setText(buffer[4] and BIT_2)
-        self.att40.setText(buffer[4] and BIT_1)
-        self.pom_prin_0.setText(buffer[4] and BIT_0)
+        temp = buffer[6]
+        # self.att20.setText(bin(temp & BIT_11)[2:])
+        # self.karta_mestn.setText(bin(temp & BIT_10)[2:])
+        # self.avt_pomeh.setText(bin(temp & BIT_9)[2:])
+        # self.obzor_nereg.setText(bin(temp & BIT_7)[2:])
+        # self.razr_peresr.setText(bin(temp & BIT_6)[2:])
+        # self.att60.setText(bin(temp & BIT_2)[2:])
+        # self.att40.setText(bin(temp & BIT_1)[2:])
+        # self.pom_prin_0.setText(bin(temp & BIT_0)[2:])
 
         # addr=0x0026 1 2 5
-        self.kontr_ib3_100.setText(buffer[5] and BIT_11)
-        self.korr_ib3_100.setText(buffer[5] and BIT_10)
-        self.perezap_ib3_100.setText(buffer[5] and BIT_9)
-        self.podg_8.setText(buffer[5] and BIT_8)
-        self.podg_3.setText(buffer[5] and BIT_7)
-        self.extr_podgot.setText(buffer[5] and BIT_6)
-        self.podgot.setText(buffer[5] and BIT_5)
-        self.afk_mfrls.setText(buffer[5] and BIT_4)
-        self.poisk_neipr.setText(buffer[5] and BIT_3)
-        self.vkl_vys.setText(buffer[5] and BIT_2)
-        self.vkl_ekv.setText(buffer[5] and BIT_1)
-        self.liter_vv.setText(buffer[5] and BIT_0)
+        temp = buffer[7]
+        # self.kontr_ib3_100.setText(bin(temp & BIT_11)[2:])
+        # self.korr_ib3_100.setText(bin(temp & BIT_10)[2:])
+        # self.perezap_ib3_100.setText(bin(temp & BIT_9)[2:])
+        # self.podg_8.setText(bin(temp & BIT_8)[2:])
+        # self.podg_3.setText(bin(temp & BIT_7)[2:])
+        # self.extr_podgot.setText(bin(temp & BIT_6)[2:])
+        # self.podgot.setText(bin(temp & BIT_5)[2:])
+        # self.afk_mfrls.setText(bin(temp & BIT_4)[2:])
+        # self.poisk_neipr.setText(bin(temp & BIT_3)[2:])
+        # self.vkl_vys.setText(bin(temp & BIT_2)[2:])
+        # self.vkl_ekv.setText(bin(temp & BIT_1)[2:])
+        # self.liter_vv.setText(bin(temp & BIT_0)[2:])
 
         # addr=0x0027 0 1 2 5
-        self.tochka.setText(buffer[6] and BIT_10)
-        self.tire.setText(buffer[6] and BIT_9)
-        self.str_left.setText(buffer[6] and BIT_8)
-        self.str_right.setText(buffer[6] and BIT_7)
-        self.str_down.setText(buffer[6] and BIT_6)
-        self.str_up.setText(buffer[6] and BIT_5)
-        self.sloy_down.setText(buffer[6] and BIT_4)
-        self.sloy_up.setText(buffer[6] and BIT_3)
-        self.otmena.setText(buffer[6] and BIT_2)
-        self.vvod_inf.setText(buffer[6] and BIT_1)
-        self.sbros_inf.setText(buffer[6] and BIT_0)
+        temp = buffer[8]
+        # self.tochka.setText(bin(temp & BIT_10)[2:])
+        # self.tire.setText(bin(temp & BIT_9)[2:])
+        # self.str_left.setText(bin(temp & BIT_8)[2:])
+        # self.str_right.setText(bin(temp & BIT_7)[2:])
+        # self.str_down.setText(bin(temp & BIT_6)[2:])
+        # self.str_up.setText(bin(temp & BIT_5)[2:])
+        # self.sloy_down.setText(bin(temp & BIT_4)[2:])
+        # self.sloy_up.setText(bin(temp & BIT_3)[2:])
+        # self.otmena.setText(bin(temp & BIT_2)[2:])
+        # self.vvod_inf.setText(bin(temp & BIT_1)[2:])
+        # self.sbros_inf.setText(bin(temp & BIT_0)[2:])
 
         # addr=0x0028 3 5
-        self.chislo.setText(buffer[7] and 0x03ff)
+        temp = buffer[9]
+        # self.chislo.setText(bin(temp & 0x03ff)[2:])
 
         # addr=0x0028 0 3 5
-        self.prizn_rpn.setText(buffer[8] and BIT_6)
-        self.prizn_sou.setText(buffer[8] and BIT_5)
-        self.p_avt_tov.setText(buffer[8] and BIT_4)
-        self.vkl_tov.setText(buffer[8] and BIT_3)
-        self.vkl_tov_b_izl.setText(buffer[8] and BIT_2)
-        self.korr_tochn_tov.setText(buffer[8] and BIT_1)
+        temp = buffer[10]
+        # self.prizn_rpn.setText(bin(temp & BIT_6)[2:])
+        # self.prizn_sou.setText(bin(temp & BIT_5)[2:])
+        # self.p_avt_tov.setText(bin(temp & BIT_4)[2:])
+        # self.vkl_tov.setText(bin(temp & BIT_3)[2:])
+        # self.vkl_tov_b_izl.setText(bin(temp & BIT_2)[2:])
+        # self.korr_tochn_tov.setText(bin(temp & BIT_1)[2:])
 
         # addr=0x41 - 0x45
-        self.acps60.setText(buffer[9] and 0x03ff)
-        self.acps61.setText(buffer[10] and 0x03ff)
-        self.acps610.setText(buffer[11] and 0x03ff)
-        self.acps62.setText(buffer[12] and 0x03ff)
-        self.acps620.setText(buffer[13] and 0x03ff)
-        self.acps621.setText(buffer[14] and 0x03ff)
+        self.acps60.setText(str((buffer[11] & 0x03ff) - 512))
+        self.acps61.setText(str((buffer[12] & 0x03ff) - 512))
+        self.acps610.setText(str((buffer[13] & 0x03ff) - 512))
+        self.acps62.setText(str((buffer[14] & 0x03ff) - 512))
+        self.acps620.setText(str((buffer[15] & 0x03ff) - 512))
+        self.acps621.setText(str((buffer[16] & 0x03ff) - 512))
 
         # addr=0x0c01 - 0x0c13
-        self.op0.setText(buffer[15])
-        self.op1.setText(buffer[16])
-        self.op2.setText(buffer[17])
-        self.op3.setText(buffer[18])
-        self.op4.setText(buffer[19])
-        self.op5.setText(buffer[20])
-        self.op6.setText(buffer[21])
-        self.op7.setText(buffer[22])
-        self.op8.setText(buffer[23])
-        self.op9.setText(buffer[24])
-        self.op10.setText(buffer[25])
-        self.op11.setText(buffer[26])
-        self.op12.setText(buffer[27])
-        self.op13.setText(buffer[28])
-        self.op14.setText(buffer[29])
-        self.op15.setText(buffer[30])
-        self.op16.setText(buffer[31])
-        self.op17.setText(buffer[32])
+        self.op0.setText(bin(buffer[17])[2:])
+        self.op1.setText(bin(buffer[18])[2:])
+        self.op2.setText(bin(buffer[19])[2:])
+        self.op3.setText(bin(buffer[20])[2:])
+        self.op4.setText(bin(buffer[21])[2:])
+        self.op5.setText(bin(buffer[22])[2:])
+        self.op6.setText(bin(buffer[23])[2:])
+        self.op7.setText(bin(buffer[24])[2:])
+        self.op8.setText(bin(buffer[25])[2:])
+        self.op9.setText(bin(buffer[26])[2:])
+        self.op10.setText(bin(buffer[27])[2:])
+        self.op11.setText(bin(buffer[28])[2:])
+        self.op12.setText(bin(buffer[29])[2:])
+        self.op13.setText(bin(buffer[30])[2:])
+        self.op14.setText(bin(buffer[31])[2:])
+        self.op15.setText(bin(buffer[32])[2:])
+        self.op16.setText(bin(buffer[33])[2:])
+        self.op17.setText(bin(buffer[34])[2:])
+
+        logging.info('set values end')
