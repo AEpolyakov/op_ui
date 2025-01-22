@@ -37,9 +37,8 @@ class Uart:
         self.connection = serial.Serial(self.port, self.speed, timeout=0.1)
         logging.info(f'USB-uart {self.port} connected')
 
-    def write_data(self, data: str):
-        data_bytes = data.encode('utf-8')
-        self.connection.write(data_bytes)
+    def write_data(self, data: bytes):
+        self.connection.write(data)
         logging.info(f'USB write {data}')
 
     def read_data(self) -> dict[int, str]:

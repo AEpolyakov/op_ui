@@ -5,7 +5,7 @@ from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6.uic import loadUi
 
-from src.constants import (BIT_0, BIT_1, BIT_2, BIT_3, BIT_4, BIT_5, BIT_6, BIT_7, BIT_8, BIT_9, BIT_10, BIT_11, BIT_12, BIT_13, BIT_14, BIT_15)
+from constants import (BIT_1, BIT_2, BIT_3, BIT_11, BIT_13)
 from uart import Uart, UartReadError
 
 
@@ -14,7 +14,10 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.timer = QTimer()
-        self.uart = Uart()
+        try:
+            self.uart = Uart()
+        except Exception as e:
+            logging.error(e)
 
         self.timer.timeout.connect(self.exchange)
         self.timer.start(100)
@@ -23,8 +26,6 @@ class MainWindow(QMainWindow):
         self.setGeometry(100, 100, 800, 600)
 
         loadUi("./qt.ui", self)
-
-        self.com_status.setText(f'{self.uart.port} Подключен')
 
     def exchange(self):
         try:
@@ -47,15 +48,42 @@ class MainWindow(QMainWindow):
         except Exception as e:
             logging.error(f'Ошибка {e}')
 
-    def get_values_from_prog(self) -> str:
-        # leds = [
-        #     int(self.led0.text(), 16),
-        #     int(self.led1.text(), 16),
-        #     int(self.led2.text(), 16),
-        #     int(self.led3.text(), 16),
-        #     int(self.led4.text(), 16)
-        # ]
-        return '012345678901'
+    def get_values_from_prog(self) -> bytes:
+        buff = []
+
+        # kni = self.radio_kni.isChecked()
+        lchm = self.radio_lchm.isChecked()
+        dist40 = self.radio_40.isChecked()
+        # dist120 = self.radio_120.isChecked()
+        kontrol = self.checkBox_kontrol.isChecked()
+        zapros = self.checkBox_zapros.isChecked()
+        sopr = self.checkBox_sopr.isChecked()
+        strobir = self.checkBox_strobir.isChecked()
+        obzor = self.checkBox_obzor.isChecked()
+
+        op_command_l = kontrol * 128 + sopr * 64 + obzor * 32 + strobir * 16 + lchm * 8 + zapros * 2
+        op_command_h = dist40 * 1
+
+        buff.append(op_command_l)
+        buff.append(op_command_h)
+
+        oo_delay = int(self.oo_delay.text())
+
+        buff.extend(self.convert(oo_delay))
+
+        leds1 = int(self.leds1.text(), 16)
+        leds2 = int(self.leds2.text(), 16)
+        leds3 = int(self.leds3.text(), 16)
+        leds4 = int(self.leds4.text(), 16)
+        leds5 = int(self.leds5.text(), 16)
+
+        buff.extend(self.convert(leds1))
+        buff.extend(self.convert(leds2))
+        buff.extend(self.convert(leds3))
+        buff.extend(self.convert(leds4))
+        buff.extend(self.convert(leds5))
+
+        return b''.join((el.to_bytes() for el in buff))
 
     def refine_buffer(self, raw_buffer: dict[int, str]) -> dict[int, int]:
         refined_buffer = dict()
@@ -110,13 +138,13 @@ class MainWindow(QMainWindow):
 
         # addr=0x0025 0 2 5
         temp = buffer[6]
-        # self.att20.setText(bin(temp & BIT_11)[2:])
+        self.att20.setText(bin(temp & BIT_11)[2:])
         # self.karta_mestn.setText(bin(temp & BIT_10)[2:])
         # self.avt_pomeh.setText(bin(temp & BIT_9)[2:])
         # self.obzor_nereg.setText(bin(temp & BIT_7)[2:])
         # self.razr_peresr.setText(bin(temp & BIT_6)[2:])
-        # self.att60.setText(bin(temp & BIT_2)[2:])
-        # self.att40.setText(bin(temp & BIT_1)[2:])
+        self.att60.setText(bin(temp & BIT_2)[2:])
+        self.att40.setText(bin(temp & BIT_1)[2:])
         # self.pom_prin_0.setText(bin(temp & BIT_0)[2:])
 
         # addr=0x0026 1 2 5
@@ -190,3 +218,7 @@ class MainWindow(QMainWindow):
         self.op17.setText(bin(buffer[34])[2:])
 
         logging.info('set values end')
+
+    @staticmethod
+    def convert(data: int) -> tuple[int, int]:
+        return data & 0xff, data >> 8

@@ -3,5 +3,4 @@
 *.exe
 *.spec
 requirements.txt
-qt.ui
 .idea
