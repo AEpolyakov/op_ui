@@ -873,7 +873,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>abcd</string>
+       <string>0000</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="leds2">
@@ -886,7 +886,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>0002</string>
+       <string>0000</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="leds3">
@@ -899,7 +899,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>0003</string>
+       <string>0000</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="leds4">
@@ -912,7 +912,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>0004</string>
+       <string>0000</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="leds5">
@@ -925,7 +925,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>0005</string>
+       <string>0000</string>
       </property>
      </widget>
     </widget>
