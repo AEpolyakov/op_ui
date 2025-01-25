@@ -35,6 +35,11 @@ class MainWindow(QMainWindow):
             raw_buffer = self.uart.read_data()
 
             self.com_status.setText(f'{self.uart.port} Подключен')
+            if self.uart.exchange_count > 9:
+                self.uart.exchange_count = 0
+            else:
+                self.uart.exchange_count += 1
+            self.com_exchange.setText(f'{self.uart.exchange_count}')
 
             buffer = self.refine_buffer(raw_buffer)
             self.set_values_from_buffer(buffer)

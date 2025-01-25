@@ -19,6 +19,7 @@ class Uart:
         self.data = None
         self.speed = speed
         self.init_uart()
+        self.exchange_count = 0
 
     def init_uart(self):
         ports = list(serial.tools.list_ports.comports())

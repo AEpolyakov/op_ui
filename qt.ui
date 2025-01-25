@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>700</width>
-    <height>686</height>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1318,6 +1318,13 @@
     <layout class="QHBoxLayout" name="statuses">
      <item>
       <widget class="QLabel" name="com_status">
+       <property name="text">
+        <string>-</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="com_exchange">
        <property name="text">
         <string>-</string>
        </property>
