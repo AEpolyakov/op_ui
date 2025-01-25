@@ -46,7 +46,6 @@ class Uart:
         for i in range(self.buffer_len):
             data[i] = self.connection.read().hex()
 
-        logging.info(f'USB read length={len(data)}')
         if not (
                 data[1] == 'de' and
                 data[0] == 'ad' and

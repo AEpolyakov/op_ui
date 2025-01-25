@@ -32,10 +32,7 @@ class MainWindow(QMainWindow):
             data_to_send = self.get_values_from_prog()
             self.uart.write_data(data_to_send)
 
-            t1 = time.perf_counter()
             raw_buffer = self.uart.read_data()
-            t2 = time.perf_counter()
-            print(f'performance {t2 - t1}')
 
             self.com_status.setText(f'{self.uart.port} Подключен')
 
@@ -64,19 +61,16 @@ class MainWindow(QMainWindow):
         op_command_l = kontrol * 128 + sopr * 64 + obzor * 32 + strobir * 16 + lchm * 8 + zapros * 2
         op_command_h = dist40 * 1
 
-        buff.append(op_command_l)
-        buff.append(op_command_h)
-
         oo_delay = int(self.oo_delay.text())
-
-        buff.extend(self.convert(oo_delay))
-
         leds1 = int(self.leds1.text(), 16)
         leds2 = int(self.leds2.text(), 16)
         leds3 = int(self.leds3.text(), 16)
         leds4 = int(self.leds4.text(), 16)
         leds5 = int(self.leds5.text(), 16)
 
+        buff.append(op_command_l)
+        buff.append(op_command_h)
+        buff.extend(self.convert(oo_delay))
         buff.extend(self.convert(leds1))
         buff.extend(self.convert(leds2))
         buff.extend(self.convert(leds3))
@@ -91,11 +85,9 @@ class MainWindow(QMainWindow):
         for index in range(self.uart.buffer_len // 2):
             refined_buffer[index] = int(raw_buffer[index * 2 + 1] + raw_buffer[index * 2], 16)
 
-        logging.info(f'refined')
         return refined_buffer
 
     def set_values_from_buffer(self, buffer: dict[int, int]) -> None:
-        logging.info('set values start')
 
         # addr=0x0021 0 5
         temp = buffer[2]
@@ -216,8 +208,6 @@ class MainWindow(QMainWindow):
         self.op15.setText(bin(buffer[32])[2:])
         self.op16.setText(bin(buffer[33])[2:])
         self.op17.setText(bin(buffer[34])[2:])
-
-        logging.info('set values end')
 
     @staticmethod
     def convert(data: int) -> tuple[int, int]:
