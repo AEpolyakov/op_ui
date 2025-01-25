@@ -2,5 +2,4 @@
 /build
 *.exe
 *.spec
-requirements.txt
 .idea
