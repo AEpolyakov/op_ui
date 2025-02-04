@@ -2,6 +2,7 @@ import logging
 from typing import Any
 
 from PyQt6.QtCore import QTimer
+from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6.uic import loadUi
 
@@ -137,6 +138,8 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("My App")
         self.setGeometry(100, 100, 800, 600)
+
+        self.setWindowIcon(QIcon("cosd.ico"))
 
         loadUi("./qt.ui", self)
 
