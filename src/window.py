@@ -207,99 +207,108 @@ class MainWindow(QMainWindow):
 
         return refined_buffer
 
+    @staticmethod
+    def get_bit_value(temp: int, bit: int) -> str:
+        return bin((temp >> bit) & 1)[2:]
+
+    @staticmethod
+    def get_bits_value(temp: int, start_bit: int, n_bits: int) -> str:
+        mask = pow(2, n_bits) - 1
+        return f'{bin((temp >> start_bit) & mask)[2:]:0>{n_bits}}'
+
     def set_values_from_buffer(self, buffer: dict[int, int]) -> None:
 
         # addr=0x0021 0 5
         temp = buffer[2]
-        self.kanaly.setText(f'Каналы\t{bin(temp & 0x0fff)[2:]:012}')
-        self.pr9A317M.setText(f'Призн 9А317М\t{bin(temp & BIT_15)[2:]}')
+        self.kanaly.setText(f'Каналы\t\t{self.get_bits_value(temp, 0, 12)}')
+        self.pr9A317M.setText(f'Призн 9А317М\t{self.get_bit_value(temp, 15)}')
 
         # addr=0x0022 1 5
         temp = buffer[3]
-        self.sbrosy.setText(f'Сбросы\t{bin(temp & 0x0fff)[2:]:012}')
-        self.nal_R51.setText(f'Наличие Р51\t{bin(temp & BIT_14)[2:]}')
-        self.ots_R36.setText(f'Отс Р36\t{bin(temp & BIT_13)[2:]}')
-        self.serv_po.setText(f'Серв. ПО\t{bin(temp & BIT_12)[2:]}')
+        self.sbrosy.setText(f'Сбросы\t\t{self.get_bits_value(temp, 0, 12)}')
+        self.nal_R51.setText(f'Наличие Р51\t{self.get_bit_value(temp, 14)}')
+        self.ots_R36.setText(f'Отс Р36\t\t{self.get_bit_value(temp, 13)}')
+        self.serv_po.setText(f'Серв. ПО\t{self.get_bit_value(temp, 12)}')
 
         # addr=0x0023 0 1 5
         temp = buffer[4]
-        self.sbros_strok.setText(f'Сброс строк\t{bin(temp & BIT_13)[2:]}')
-        self.stroki.setText(f'Строки\t\t{bin(temp & 0x1f00)[2:]:05}')
-        self.otkaz_ot_CU.setText(f'Отказ от ЦУ\t{bin(temp & BIT_7)[2:]}')
-        self.peresbros.setText(f'Переброс\t{bin(temp & BIT_6)[2:]}')
-        self.inerc_sopr.setText(f'Инерц сопр\t{bin(temp & BIT_5)[2:]}')
-        self.pom_prin_c.setText(f'Пом прин С\t{bin(temp & BIT_4)[2:]}')
-        self.zapros.setText(f'Запрос\t\t{bin(temp & BIT_3)[2:]}')
-        self.sbr_zahv.setText(f'Сбр захв\t{bin(temp & BIT_2)[2:]}')
-        self.razr_zahv.setText(f'Разр захв\t{bin(temp & BIT_1)[2:]}')
+        self.sbros_strok.setText(f'Сброс строк\t{self.get_bit_value(temp, 13)}')
+        self.stroki.setText(f'Строки\t\t{self.get_bits_value(temp, 8, 5)}')
+        self.otkaz_ot_CU.setText(f'Отказ от ЦУ\t{self.get_bit_value(temp, 7)}')
+        self.peresbros.setText(f'Переброс\t{self.get_bit_value(temp, 6)}')
+        self.inerc_sopr.setText(f'Инерц сопр\t{self.get_bit_value(temp, 5)}')
+        self.pom_prin_c.setText(f'Пом прин С\t{self.get_bit_value(temp, 4)}')
+        self.zapros.setText(f'Запрос\t\t{self.get_bit_value(temp, 3)}')
+        self.sbr_zahv.setText(f'Сбр захв\t{self.get_bit_value(temp, 2)}')
+        self.razr_zahv.setText(f'Разр захв\t{self.get_bit_value(temp, 1)}')
 
         # addr=0x0024 2 5
         temp = buffer[5]
-        self.ubyv_lchm.setText(f'Убыв ЛЧМ\t{bin(temp & BIT_11)[2:]}')
-        self.p_avt_D.setText(f'П/АВТ Д\t{bin(temp & BIT_10)[2:]}')
-        self.ruchn_Fd.setText(f'Ручн Fд\t{bin(temp & BIT_9)[2:]}')
-        self.avt_smena_izl.setText(f'Авт смена изл\t{bin(temp & BIT_8)[2:]}')
-        self.zahv_ruchn.setText(f'Захв ручн\t{bin(temp & BIT_7)[2:]}')
-        self.dist_120.setText(f'Дист 120\t{bin(temp & BIT_6)[2:]}')
-        self.lchm_komb.setText(f'ЛЧМ комб\t{bin(temp & BIT_5)[2:]}')
-        self.dist_40.setText(f'Дист 40\t{bin(temp & BIT_4)[2:]}')
-        self.obrab_sdc.setText(f'Обраб СДЦ\t{bin(temp & BIT_3)[2:]}')
-        self.izl_lchm.setText(f'Изл ЛЧМ\t{bin(temp & BIT_2)[2:]}')
-        self.izl_kni.setText(f'Изл КНИ\t{bin(temp & BIT_1)[2:]}')
-        self.avt_rab.setText(f'Авт раб\t{bin(temp & BIT_0)[2:]}')
+        self.ubyv_lchm.setText(f'Убыв ЛЧМ\t{self.get_bit_value(temp, 11)}')
+        self.p_avt_D.setText(f'П/АВТ Д\t\t{self.get_bit_value(temp, 10)}')
+        self.ruchn_Fd.setText(f'Ручн Fд\t\t{self.get_bit_value(temp, 9)}')
+        self.avt_smena_izl.setText(f'Авт смена изл\t{self.get_bit_value(temp, 8)}')
+        self.zahv_ruchn.setText(f'Захв ручн\t{self.get_bit_value(temp, 7)}')
+        self.dist_120.setText(f'Дист 120\t{self.get_bit_value(temp, 6)}')
+        self.lchm_komb.setText(f'ЛЧМ комб\t{self.get_bit_value(temp, 5)}')
+        self.dist_40.setText(f'Дист 40\t\t{self.get_bit_value(temp, 4)}')
+        self.obrab_sdc.setText(f'Обраб СДЦ\t{self.get_bit_value(temp, 3)}')
+        self.izl_lchm.setText(f'Изл ЛЧМ\t\t{self.get_bit_value(temp, 2)}')
+        self.izl_kni.setText(f'Изл КНИ\t\t{self.get_bit_value(temp, 1)}')
+        self.avt_rab.setText(f'Авт раб\t\t{self.get_bit_value(temp, 0)}')
 
         # addr=0x0025 0 2 5
         temp = buffer[6]
-        self.att20.setText(f'Затух 20\t{bin(temp & BIT_11)[2:]}')
-        self.karta_mestn.setText(f'Карта местн\t{bin(temp & BIT_10)[2:]}')
-        self.avt_pomeh.setText(f'Авт пом\t{bin(temp & BIT_9)[2:]}')
-        self.obzor_nereg.setText(f'Обзор нерег\t{bin(temp & BIT_7)[2:]}')
-        self.razr_peresr.setText(f'Разр перест\t{bin(temp & BIT_6)[2:]}')
-        self.att60.setText(f'Затух 60\t{bin(temp & BIT_2)[2:]}')
-        self.att40.setText(f'Затух 40\t{bin(temp & BIT_1)[2:]}')
-        self.pom_prin_o.setText(f'Пом прин О\t{bin(temp & BIT_0)[2:]}')
+        self.att20.setText(f'Затух 20\t{self.get_bit_value(temp, 11)}')
+        self.karta_mestn.setText(f'Карта местн\t{self.get_bit_value(temp, 10)}')
+        self.avt_pomeh.setText(f'Авт пом\t\t{self.get_bit_value(temp, 9)}')
+        self.obzor_nereg.setText(f'Обзор нерег\t{self.get_bit_value(temp, 7)}')
+        self.razr_peresr.setText(f'Разр перест\t{self.get_bit_value(temp, 6)}')
+        self.att60.setText(f'Затух 60\t{self.get_bit_value(temp, 2)}')
+        self.att40.setText(f'Затух 40\t{self.get_bit_value(temp, 1)}')
+        self.pom_prin_o.setText(f'Пом прин О\t{self.get_bit_value(temp, 0)}')
 
         # addr=0x0026 1 2 5
         temp = buffer[7]
-        self.kontr_ib3_100.setText(f'Контр ИБ3 100\t\t{bin(temp & BIT_11)[2:]}')
-        self.korr_ib3_100.setText(f'Корр ИБ3 100\t\t{bin(temp & BIT_10)[2:]}')
-        self.perezap_ib3_100.setText(f'Перезап ИБ3 100\t{bin(temp & BIT_9)[2:]}')
-        self.podg_8.setText(f'Подг 8\t\t\t{bin(temp & BIT_8)[2:]}')
-        self.podg_3.setText(f'Подг 3\t\t\t{bin(temp & BIT_7)[2:]}')
-        self.extr_podgot.setText(f'Эктр. подгот\t\t{bin(temp & BIT_6)[2:]}')
-        self.podgot.setText(f'Подгот\t\t\t{bin(temp & BIT_5)[2:]}')
-        self.afk_mfrls.setText(f'АФК МФРЛС\t\t{bin(temp & BIT_4)[2:]}')
-        self.poisk_neispr.setText(f'Поиск неиспр\t\t{bin(temp & BIT_3)[2:]}')
-        self.vkl_vys.setText(f'Вкл выс\t\t{bin(temp & BIT_2)[2:]}')
-        self.vkl_ekv.setText(f'Вкл экв\t\t\t{bin(temp & BIT_1)[2:]}')
-        self.liter_vv.setText(f'Литер ВВ\t\t{bin(temp & BIT_0)[2:]}')
+        self.kontr_ib3_100.setText(f'Контр ИБ3 100\t\t{self.get_bit_value(temp, 11)}')
+        self.korr_ib3_100.setText(f'Корр ИБ3 100\t\t{self.get_bit_value(temp, 10)}')
+        self.perezap_ib3_100.setText(f'Перезап ИБ3 100\t{self.get_bit_value(temp, 9)}')
+        self.podg_8.setText(f'Подг 8\t\t\t{self.get_bit_value(temp, 8)}')
+        self.podg_3.setText(f'Подг 3\t\t\t{self.get_bit_value(temp, 7)}')
+        self.extr_podgot.setText(f'Эктр. подгот\t\t{self.get_bit_value(temp, 6)}')
+        self.podgot.setText(f'Подгот\t\t\t{self.get_bit_value(temp, 5)}')
+        self.afk_mfrls.setText(f'АФК МФРЛС\t\t{self.get_bit_value(temp, 4)}')
+        self.poisk_neispr.setText(f'Поиск неиспр\t\t{self.get_bit_value(temp, 3)}')
+        self.vkl_vys.setText(f'Вкл выс\t\t{self.get_bit_value(temp, 2)}')
+        self.vkl_ekv.setText(f'Вкл экв\t\t\t{self.get_bit_value(temp, 1)}')
+        self.liter_vv.setText(f'Литер ВВ\t\t{self.get_bit_value(temp, 0)}')
 
         # addr=0x0027 0 1 2 5
         temp = buffer[8]
-        self.tochka.setText(f'Точка\t\t{bin(temp & BIT_10)[2:]}')
-        self.tire.setText(f'Тире\t\t{bin(temp & BIT_9)[2:]}')
-        self.str_left.setText(f'Стр лево\t{bin(temp & BIT_8)[2:]}')
-        self.str_right.setText(f'Стр право\t{bin(temp & BIT_7)[2:]}')
-        self.str_down.setText(f'Стр вниз\t{bin(temp & BIT_6)[2:]}')
-        self.str_up.setText(f'Стр вверх\t{bin(temp & BIT_5)[2:]}')
-        self.sloy_down.setText(f'Слой вниз\t{bin(temp & BIT_4)[2:]}')
-        self.sloy_up.setText(f'Слой вверх\t{bin(temp & BIT_3)[2:]}')
-        self.otmena.setText(f'Отмена\t{bin(temp & BIT_2)[2:]}')
-        self.vvod_inf.setText(f'Ввод инф\t{bin(temp & BIT_1)[2:]}')
-        self.sbros_inf.setText(f'Сброс инф\t{bin(temp & BIT_0)[2:]}')
+        self.tochka.setText(f'Точка\t\t{self.get_bit_value(temp, 10)}')
+        self.tire.setText(f'Тире\t\t{self.get_bit_value(temp, 9)}')
+        self.str_left.setText(f'Стр лево\t{self.get_bit_value(temp, 8)}')
+        self.str_right.setText(f'Стр право\t{self.get_bit_value(temp, 7)}')
+        self.str_down.setText(f'Стр вниз\t{self.get_bit_value(temp, 6)}')
+        self.str_up.setText(f'Стр вверх\t{self.get_bit_value(temp, 5)}')
+        self.sloy_down.setText(f'Слой вниз\t{self.get_bit_value(temp, 4)}')
+        self.sloy_up.setText(f'Слой вверх\t{self.get_bit_value(temp, 3)}')
+        self.otmena.setText(f'Отмена\t{self.get_bit_value(temp, 2)}')
+        self.vvod_inf.setText(f'Ввод инф\t{self.get_bit_value(temp, 1)}')
+        self.sbros_inf.setText(f'Сброс инф\t{self.get_bit_value(temp, 0)}')
 
         # addr=0x0028 3 5
         temp = buffer[9]
-        self.chislo.setText(f'Число\t{bin(temp & 0x03ff)[2:]:010}')
+        self.chislo.setText(f'Число\t{self.get_bits_value(temp, 0, 10)}')
 
         # addr=0x0028 0 3 5
         temp = buffer[10]
-        self.prizn_rpn.setText(f'Призн РПН\t\t{bin(temp & BIT_6)[2:]}')
-        self.prizn_sou.setText(f'Призн СОУ\t\t{bin(temp & BIT_5)[2:]}')
-        self.p_avt_tov.setText(f'П/авт ТОВ\t\t{bin(temp & BIT_4)[2:]}')
-        self.vkl_tov.setText(f'Вкл ТОВ\t\t{bin(temp & BIT_3)[2:]}')
-        self.vkl_tov_b_izl.setText(f'Вкл ТОВ без изл\t{bin(temp & BIT_2)[2:]}')
-        self.korr_tochn_tov.setText(f'Корр точн ТОВ\t{bin(temp & BIT_1)[2:]}')
+        self.prizn_rpn.setText(f'Призн РПН\t\t{self.get_bit_value(temp, 6)}')
+        self.prizn_sou.setText(f'Призн СОУ\t\t{self.get_bit_value(temp, 5)}')
+        self.p_avt_tov.setText(f'П/авт ТОВ\t\t{self.get_bit_value(temp, 4)}')
+        self.vkl_tov.setText(f'Вкл ТОВ\t\t{self.get_bit_value(temp, 3)}')
+        self.vkl_tov_b_izl.setText(f'Вкл ТОВ без изл\t{self.get_bit_value(temp, 2)}')
+        self.korr_tochn_tov.setText(f'Корр точн ТОВ\t{self.get_bit_value(temp, 1)}')
 
         # addr=0x41 - 0x45
         self.acps60.setText(f'АЦПС 6 0 \t{str((buffer[11] & 0x03ff) - 512)}')
@@ -310,24 +319,24 @@ class MainWindow(QMainWindow):
         self.acps621.setText(f'АЦПС 6 2 1 \t{str((buffer[16] & 0x03ff) - 512)}')
 
         # addr=0x0c01 - 0x0c13
-        self.op0.setText(f'{bin(buffer[17])[2:]:016}')
-        self.op1.setText(f'{bin(buffer[18])[2:]:016}')
-        self.op2.setText(f'{bin(buffer[19])[2:]:016}')
-        self.op3.setText(f'{bin(buffer[20])[2:]:016}')
-        self.op4.setText(f'{bin(buffer[21])[2:]:016}')
-        self.op5.setText(f'{bin(buffer[22])[2:]:016}')
-        self.op6.setText(f'{bin(buffer[23])[2:]:016}')
-        self.op7.setText(f'{bin(buffer[24])[2:]:016}')
-        self.op8.setText(f'{bin(buffer[25])[2:]:016}')
-        self.op9.setText(f'{bin(buffer[26])[2:]:016}')
-        self.op10.setText(f'{bin(buffer[27])[2:]:016}')
-        self.op11.setText(f'{bin(buffer[28])[2:]:016}')
-        self.op12.setText(f'{bin(buffer[29])[2:]:016}')
-        self.op13.setText(f'{bin(buffer[30])[2:]:016}')
-        self.op14.setText(f'{bin(buffer[31])[2:]:016}')
-        self.op15.setText(f'{bin(buffer[32])[2:]:016}')
-        self.op16.setText(f'{bin(buffer[33])[2:]:016}')
-        self.op17.setText(f'{bin(buffer[34])[2:]:016}')
+        self.op0.setText(f'{bin(buffer[17])[2:]:0>16}')
+        self.op1.setText(f'{bin(buffer[18])[2:]:0>16}')
+        self.op2.setText(f'{bin(buffer[19])[2:]:0>16}')
+        self.op3.setText(f'{bin(buffer[20])[2:]:0>16}')
+        self.op4.setText(f'{bin(buffer[21])[2:]:0>16}')
+        self.op5.setText(f'{bin(buffer[22])[2:]:0>16}')
+        self.op6.setText(f'{bin(buffer[23])[2:]:0>16}')
+        self.op7.setText(f'{bin(buffer[24])[2:]:0>16}')
+        self.op8.setText(f'{bin(buffer[25])[2:]:0>16}')
+        self.op9.setText(f'{bin(buffer[26])[2:]:0>16}')
+        self.op10.setText(f'{bin(buffer[27])[2:]:0>16}')
+        self.op11.setText(f'{bin(buffer[28])[2:]:0>16}')
+        self.op12.setText(f'{bin(buffer[29])[2:]:0>16}')
+        self.op13.setText(f'{bin(buffer[30])[2:]:0>16}')
+        self.op14.setText(f'{bin(buffer[31])[2:]:0>16}')
+        self.op15.setText(f'{bin(buffer[32])[2:]:0>16}')
+        self.op16.setText(f'{bin(buffer[33])[2:]:0>16}')
+        self.op17.setText(f'{bin(buffer[34])[2:]:0>16}')
 
     @staticmethod
     def convert(data: int) -> tuple[int, int]:

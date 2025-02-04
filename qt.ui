@@ -36,9 +36,9 @@
      <widget class="QWidget" name="verticalLayoutWidget">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>10</x>
         <y>10</y>
-        <width>151</width>
+        <width>141</width>
         <height>431</height>
        </rect>
       </property>
@@ -133,7 +133,7 @@
        <item>
         <widget class="QLineEdit" name="oo_delay">
          <property name="text">
-          <string>5</string>
+          <string>50</string>
          </property>
         </widget>
        </item>
@@ -441,7 +441,7 @@
      <widget class="QLineEdit" name="leds1">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>120</x>
         <y>30</y>
         <width>41</width>
         <height>20</height>
@@ -454,7 +454,7 @@
      <widget class="QLineEdit" name="leds3">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>120</x>
         <y>90</y>
         <width>41</width>
         <height>20</height>
@@ -467,7 +467,7 @@
      <widget class="QLineEdit" name="leds2">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>120</x>
         <y>60</y>
         <width>41</width>
         <height>20</height>
@@ -480,7 +480,7 @@
      <widget class="QLineEdit" name="leds4">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>120</x>
         <y>120</y>
         <width>41</width>
         <height>20</height>
@@ -493,7 +493,7 @@
      <widget class="QLineEdit" name="leds5">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>120</x>
         <y>150</y>
         <width>41</width>
         <height>20</height>
@@ -501,6 +501,71 @@
       </property>
       <property name="text">
        <string>0000</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="leds_label1">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>СЛ ИНД1</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="leds_label1_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>СЛ ИНД2</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="leds_label1_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>90</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>СЛ ИНД3</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="leds_label1_4">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>120</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>СЛ ИНД4</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="leds_label1_5">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>150</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>СЛ ИНД5</string>
       </property>
      </widget>
     </widget>
@@ -512,10 +577,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>10</y>
-        <width>151</width>
+        <y>20</y>
+        <width>251</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Каналы</string>
@@ -525,10 +596,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>30</y>
-        <width>151</width>
+        <y>0</y>
+        <width>251</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Сброс</string>
@@ -538,10 +615,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>50</y>
-        <width>151</width>
+        <y>40</y>
+        <width>211</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Строки</string>
@@ -551,10 +634,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>70</y>
-        <width>151</width>
+        <y>60</y>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Сброс строк</string>
@@ -565,9 +654,15 @@
        <rect>
         <x>10</x>
         <y>90</y>
-        <width>121</width>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>запрос</string>
@@ -577,10 +672,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>110</y>
-        <width>121</width>
+        <y>130</y>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>сбр захв</string>
@@ -590,10 +691,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>130</y>
-        <width>121</width>
+        <y>110</y>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>разр захв</string>
@@ -603,10 +710,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>180</y>
-        <width>121</width>
+        <y>370</y>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Нал Р51</string>
@@ -616,10 +729,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>160</y>
-        <width>121</width>
+        <y>350</y>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Пр 9А317М</string>
@@ -629,10 +748,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>220</y>
-        <width>121</width>
+        <y>410</y>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Серв ПО</string>
@@ -642,10 +767,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>200</y>
-        <width>121</width>
+        <y>390</y>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Отс Р36</string>
@@ -655,10 +786,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>250</y>
-        <width>121</width>
+        <y>210</y>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Отказ от ЦУ</string>
@@ -668,10 +805,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>270</y>
-        <width>121</width>
+        <y>190</y>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Инерц сопр</string>
@@ -681,10 +824,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>290</y>
-        <width>121</width>
+        <y>230</y>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Пересброс</string>
@@ -694,10 +843,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>310</y>
-        <width>121</width>
+        <y>170</y>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>Пом прин С</string>
@@ -706,11 +861,17 @@
      <widget class="QLabel" name="ubyv_lchm">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>340</y>
-        <width>121</width>
+        <x>260</x>
+        <y>200</y>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>ubyv_lchm</string>
@@ -720,10 +881,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>360</y>
-        <width>121</width>
+        <y>300</y>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>ruchn_Fd</string>
@@ -733,10 +900,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>380</y>
-        <width>121</width>
+        <y>280</y>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>p_avt_D</string>
@@ -745,11 +918,17 @@
      <widget class="QLabel" name="avt_smena_izl">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>400</y>
-        <width>121</width>
+        <x>260</x>
+        <y>180</y>
+        <width>191</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>avt_smena_izl</string>
@@ -758,11 +937,17 @@
      <widget class="QLabel" name="dist_120">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>10</y>
-        <width>111</width>
+        <x>260</x>
+        <y>20</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>dist_120</string>
@@ -771,11 +956,17 @@
      <widget class="QLabel" name="zahv_ruchn">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>30</y>
-        <width>111</width>
+        <x>10</x>
+        <y>320</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>zahv_ruchn</string>
@@ -784,11 +975,17 @@
      <widget class="QLabel" name="dist_40">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>50</y>
-        <width>111</width>
+        <x>260</x>
+        <y>0</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>dist_40</string>
@@ -797,11 +994,17 @@
      <widget class="QLabel" name="lchm_komb">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>70</y>
-        <width>111</width>
+        <x>260</x>
+        <y>40</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>lchm_komb</string>
@@ -810,11 +1013,17 @@
      <widget class="QLabel" name="izl_lchm">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>90</y>
-        <width>111</width>
+        <x>260</x>
+        <y>60</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>izl_lchm</string>
@@ -823,11 +1032,17 @@
      <widget class="QLabel" name="obrab_sdc">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>110</y>
-        <width>111</width>
+        <x>260</x>
+        <y>100</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>obrab_sdc</string>
@@ -836,11 +1051,17 @@
      <widget class="QLabel" name="avt_rab">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>130</y>
-        <width>111</width>
+        <x>10</x>
+        <y>260</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>avt_rab</string>
@@ -849,11 +1070,17 @@
      <widget class="QLabel" name="izl_kni">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>150</y>
-        <width>111</width>
+        <x>260</x>
+        <y>80</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>izl_kni</string>
@@ -862,11 +1089,17 @@
      <widget class="QLabel" name="avt_pomeh">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>180</y>
-        <width>111</width>
+        <x>260</x>
+        <y>120</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>avt_pomeh</string>
@@ -875,11 +1108,17 @@
      <widget class="QLabel" name="karta_mestn">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>200</y>
-        <width>111</width>
+        <x>260</x>
+        <y>240</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>karta_mestn</string>
@@ -888,11 +1127,17 @@
      <widget class="QLabel" name="razr_peresr">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>220</y>
-        <width>111</width>
+        <x>260</x>
+        <y>140</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>razr_peresr</string>
@@ -901,11 +1146,17 @@
      <widget class="QLabel" name="obzor_nereg">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>240</y>
-        <width>111</width>
+        <x>260</x>
+        <y>160</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>obzor_nereg</string>
@@ -914,11 +1165,17 @@
      <widget class="QLabel" name="pom_prin_o">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>260</y>
-        <width>111</width>
+        <x>260</x>
+        <y>220</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>pom_prin_o</string>
@@ -927,11 +1184,17 @@
      <widget class="QLabel" name="att40">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>320</y>
-        <width>91</width>
+        <x>260</x>
+        <y>370</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>затухание 40</string>
@@ -940,11 +1203,17 @@
      <widget class="QLabel" name="att20">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>300</y>
-        <width>91</width>
+        <x>260</x>
+        <y>350</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>затухание 20</string>
@@ -953,11 +1222,17 @@
      <widget class="QLabel" name="att60">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>340</y>
-        <width>91</width>
+        <x>260</x>
+        <y>390</y>
+        <width>161</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="text">
        <string>затухание 60</string>
@@ -1448,7 +1723,7 @@
      <rect>
       <x>10</x>
       <y>480</y>
-      <width>501</width>
+      <width>511</width>
       <height>21</height>
      </rect>
     </property>
