@@ -5,8 +5,6 @@ from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6.uic import loadUi
 
-from constants import (BIT_1, BIT_2, BIT_3, BIT_11, BIT_13, BIT_15, BIT_14, BIT_12, BIT_6, BIT_7, BIT_9, BIT_10, BIT_0,
-                       BIT_4, BIT_5, BIT_8)
 from uart import Uart, UartReadError
 
 
