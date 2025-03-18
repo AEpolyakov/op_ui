@@ -34,8 +34,6 @@ class MainWindow(QMainWindow, MainWindowDef):
 
         self.setWindowIcon(QIcon("cosd.ico"))
 
-        self.op_image.setScaledContents(True)
-
         self.timer = QTimer()
 
         try:
