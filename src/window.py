@@ -14,7 +14,14 @@ class MainWindow(QMainWindow, MainWindowDef):
     def __init__(self):
         super().__init__()
 
+        loadUi("./qt.ui", self)
+
+        self.setWindowIcon(QIcon("cosd.ico"))
+
+        self.op_image.setScaledContents(True)
+
         self.timer = QTimer()
+
         try:
             self.uart = Uart()
         except Exception as e:
@@ -22,13 +29,6 @@ class MainWindow(QMainWindow, MainWindowDef):
 
         self.timer.timeout.connect(self.exchange)
         self.timer.start(100)
-
-        self.setWindowTitle("My App")
-        self.setGeometry(100, 100, 800, 600)
-
-        self.setWindowIcon(QIcon("cosd.ico"))
-
-        loadUi("./qt.ui", self)
 
     def exchange(self):
         try:
