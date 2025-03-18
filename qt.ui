@@ -133,7 +133,7 @@
        <item>
         <widget class="QLineEdit" name="oo_delay">
          <property name="text">
-          <string>50</string>
+          <string>3</string>
          </property>
         </widget>
        </item>
@@ -432,6 +432,19 @@
         <string>-</string>
        </property>
       </widget>
+     </widget>
+     <widget class="QLabel" name="op_image">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>20</y>
+        <width>141</width>
+        <height>411</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>op_image</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_leds">
