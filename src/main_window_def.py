@@ -115,3 +115,7 @@ class MainWindowDef(object):
     leds3: Any
     leds4: Any
     leds5: Any
+
+    op_image: Any
+    com_status: Any
+    com_exchange: Any
