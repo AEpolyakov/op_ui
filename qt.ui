@@ -445,6 +445,9 @@
       <property name="text">
        <string>op_image</string>
       </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_leds">

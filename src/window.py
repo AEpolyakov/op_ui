@@ -1,7 +1,7 @@
 import logging
 
-from PyQt6.QtCore import QTimer
-from PyQt6.QtGui import QIcon
+from PyQt6.QtCore import QTimer, Qt
+from PyQt6.QtGui import QIcon, QImage, QPixmap
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6.uic import loadUi
 
@@ -10,6 +10,22 @@ from uart import Uart, UartReadError
 
 
 class MainWindow(QMainWindow, MainWindowDef):
+
+    def update_image(self, op_data: list[int]):
+        width, height = 50, 288
+
+        image = QImage(width, height, QImage.Format.Format_RGB888)
+        image.fill(Qt.GlobalColor.black)
+
+        for y in range(height):
+            if op_data[y] == 1:
+                for x in range(width):
+                    image.setPixelColor(x, y, Qt.GlobalColor.green)
+
+        image = image.mirrored(vertical=True)
+        pixmap = QPixmap.fromImage(image)
+
+        self.op_image.setPixmap(pixmap)
 
     def __init__(self):
         super().__init__()
@@ -31,35 +47,51 @@ class MainWindow(QMainWindow, MainWindowDef):
         self.timer.start(100)
 
     def exchange(self):
+        raw_buffer = []
+        data_to_send = self.get_values_from_interface()
+        self.uart.write_data(data_to_send)
+
         try:
-            data_to_send = self.get_values_from_prog()
-            self.uart.write_data(data_to_send)
-
             raw_buffer = self.uart.read_data()
-
-            self.com_status.setText(f'{self.uart.port} Подключен')
-            if self.uart.exchange_count > 9:
-                self.uart.exchange_count = 0
-            else:
-                self.uart.exchange_count += 1
-            self.com_exchange.setText(f'{self.uart.exchange_count}')
-
-            buffer = self.refine_buffer(raw_buffer)
-            self.set_values_from_buffer(buffer)
-
         except UartReadError as e:
             self.com_status.setText(f'{self.uart.port} Ошибка')
-            logging.error('Ошибка чтения UART')
+            logging.error(f'Ошибка чтения UART {e}')
         except Exception as e:
             logging.error(f'Ошибка {e}')
 
-    def get_values_from_prog(self) -> bytes:
+        self.com_status.setText(f'{self.uart.port} Подключен')
+        if self.uart.exchange_count > 9:
+            self.uart.exchange_count = 0
+        else:
+            self.uart.exchange_count += 1
+        self.com_exchange.setText(f'{self.uart.exchange_count}')
+
+        buffer = self.refine_buffer(raw_buffer)
+        self.set_values_from_buffer(buffer)
+
+        self.update_image(self.refine_op_data(buffer))
+
+    @staticmethod
+    def refine_op_data(buffer: dict[int, int]) -> list[int]:
+        """Преобразовать буфер полученный из оп размера 18x16 в одномерный массив размера 288x1"""
+        op_words = []
+        for index, value in buffer.items():
+            if 17 <= index <= 34:
+                op_words.append(value)
+        op_data = []
+        for word in op_words:
+            temp = word
+            for bit in range(16):
+                op_data.append(temp & 1)
+                temp = temp >> 1
+        return op_data
+
+    def get_values_from_interface(self) -> bytes:
+        """Получить значения заданные в интерфейсе программы."""
         buff = []
 
-        # kni = self.radio_kni.isChecked()
         lchm = self.radio_lchm.isChecked()
         dist40 = self.radio_40.isChecked()
-        # dist120 = self.radio_120.isChecked()
         kontrol = self.checkBox_kontrol.isChecked()
         zapros = self.checkBox_zapros.isChecked()
         sopr = self.checkBox_sopr.isChecked()
@@ -88,6 +120,7 @@ class MainWindow(QMainWindow, MainWindowDef):
         return b''.join((el.to_bytes() for el in buff))
 
     def refine_buffer(self, raw_buffer: dict[int, str]) -> dict[int, int]:
+        """Преобразование списка 74x8 бит в словарь 36x16"""
         refined_buffer = dict()
 
         for index in range(self.uart.buffer_len // 2):
