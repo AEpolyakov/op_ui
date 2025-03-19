@@ -16,7 +16,7 @@ class MainWindow(QMainWindow, MainWindowDef, OpImageWriter):
     def __init__(self):
         super().__init__()
 
-        loadUi("./qt.ui", self)
+        loadUi("./cosd.ui", self)
 
         self.setWindowIcon(QIcon("cosd.ico"))
 
