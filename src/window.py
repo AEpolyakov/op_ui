@@ -5,9 +5,9 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6.uic import loadUi
 
-from src.main_window_def import MainWindowDef
-from src.op_image_writer import OpImageWriter
-from src.utils import get_bits_value, get_bit_value, convert_input_to_buffer, refine_buffer
+from main_window_def import MainWindowDef
+from op_image_writer import OpImageWriter
+from utils import get_bits_value, get_bit_value, convert_input_to_buffer, refine_buffer
 from uart import Uart, UartReadError
 
 
