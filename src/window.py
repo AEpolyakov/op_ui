@@ -76,7 +76,11 @@ class MainWindow(QMainWindow, MainWindowDef, OpImageWriter):
         op_command_l = kontrol * 128 + sopr * 64 + obzor * 32 + strobir * 16 + lchm * 8 + zapros * 2
         op_command_h = dist40 * 1
 
-        oo_delay = int(self.oo_delay.text())
+        try:
+            oo_delay = int(self.oo_delay.text())
+        except ValueError:
+            oo_delay = 0
+
         leds1 = int(self.leds1.text(), 16)
         leds2 = int(self.leds2.text(), 16)
         leds3 = int(self.leds3.text(), 16)
