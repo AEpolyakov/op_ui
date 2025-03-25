@@ -50,7 +50,8 @@ class MainWindow(QMainWindow, MainWindowDef, OpImageWriter):
         buffer = refine_buffer(raw_buffer, self.uart.buffer_len)
         self.set_values_from_buffer(buffer)
 
-        self.rewrite_image(self.refine_op_data(buffer), self.op_image)
+        self.rewrite_op_image(self.refine_op_data(buffer, 17, 34), self.op_image)
+        self.rewrite_acps_image(self.refine_acps_data(buffer, 11, 12), self.tov_image)
 
     def update_uart_status(self):
         """Отобразить статус подключения uart."""

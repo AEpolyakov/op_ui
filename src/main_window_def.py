@@ -119,3 +119,5 @@ class MainWindowDef(object):
     op_image: Any
     com_status: Any
     com_exchange: Any
+
+    tov_image: Any
